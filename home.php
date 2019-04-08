@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set("Europe/Paris");
 
 if(isset($_SESSION['name'])){
 //  stocker dans un cookies le nombre de visites client: 
@@ -24,7 +25,7 @@ if(isset($_SESSION['name'])){
      - Son adresse IP */
     $currentTime = date('Y-m-d h:i:s');
     $fp = fopen('contact_log.txt', 'a');
-    fwrite($fp, "/\n {$currentTime}\t{$_SESSION['f_name']} {$_SESSION['name']}\t{$_SERVER['REMOTE_ADDR']}/\t");
+    fwrite($fp, "/Date: {$currentTime}\t Username: {$_SESSION['name']}\t Password: {$_SESSION['password']} \t IP: {$_SERVER['REMOTE_ADDR']}/\t \n");
     fclose($fp);
     
 } else {
@@ -57,25 +58,35 @@ if(isset($_SESSION['name'])){
 	</head>
 	<body>
 		<div>
-    		<h1>Bonjour, <?=$_SESSION['f_name']; ?></h1>
-    		<p> Vous avez visit&eacute; ce site <?=$_COOKIE['count']; ?> fois.</p>
+    		<h1>Bonjour, <?=$_SESSION['name']; ?></h1>
+    		<p>Vous avez visit&eacute; ce site <?=$_COOKIE['count']; ?> fois.</p>
+    		<p>Nous sommes: <?=$currentTime; ?> </p>
+    		<p>Pour acc&eacute;der &agrave; vos identifiants cliquez <a href= "" id="identifiants">ici</a></p>
+    		<p id="namePass"></p>
     		<p>Vous serez d&eacute;connect&eacute; dans <span id="counter"> </span> secondes automatiquement.</p><br/>
     		<a href="logout.php"><button>Se d&eacute;connecter</button></a>
+    		
 		</div>
 		<script>
-		let counter = document.getElementById("counter");
-		let currentTime = <?php echo 60 - time() + $_SESSION['auth_timestamp']; ?>;
-		counter.textContent = currentTime;
-		let countDown = function() {
-			if(counter.textContent > 0){
-				counter.textContent -= 1;
-			} else {
-    			window.clearInterval(timer);
-    			window.location='index.php';
-			}
+    		let counter = document.getElementById("counter");
+    		let currentTime = <?php echo 60 - time() + $_SESSION['auth_timestamp']; ?>;
+    		counter.textContent = currentTime;
+    		let countDown = function() {
+    			if(counter.textContent > 0){
+    				counter.textContent -= 1;
+    			} else {
+        			window.clearInterval(timer);
+        			window.location='index.php';
+    			}
+    
+    		};
+    		let timer = window.setInterval(countDown, 1000);
 
-		};
-		let timer = window.setInterval(countDown, 1000);		
+    		
+			document.getElementById("identifiants").addEventListener("click", function(){
+				let identifiants = "<?php echo "Username: {$_SESSION['name']} Password: {$_SESSION['password']}"; ?>";
+				alert(identifiants);
+			});	
 		</script>
 
 	</body>

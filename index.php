@@ -1,29 +1,26 @@
 <?php
 session_start();
+
 $name = '';
-$email = '';
-$f_name = '';
 
 if(count($_POST) > 0) {
     $name = htmlentities(trim($_POST['name']));
-    $email =  htmlentities(trim($_POST['email']));
-    $f_name = htmlentities(trim($_POST['f_name']));
+    $password = htmlentities($_POST['password']);
     
-    if(isset($_POST['name'])&&!empty($_POST['name'])&&isset($_POST['email'])&&!empty($_POST['email'])
-        &&isset($_POST['f_name'])&&!empty($_POST['f_name'])){
+    if(isset($_POST['name'])&&!empty($_POST['name'])&&isset($_POST['password'])&&!empty($_POST['password'])){
         
-        if(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        if($name=="admin" && $password=="admin123") {
             $_SESSION['name'] = $name;
-            $_SESSION['f_name'] = $f_name;
+            $_SESSION['password'] = $password;
             $_SESSION['auth_timestamp'] = time();
             header('Location: home.php');
             
         } else {
-            $msg = 'L\'adresse email n\'est pas valide.';
+            $msg = 'Le mot de passe ou/et username ne sont pas valides.';
         }
         
     } else {
-        $msg = 'Tous les champs du formulaire doivent être remplis.';
+        $msg = 'Tous les champs doivent etre remplis.';
     }
 }
 else {
@@ -36,7 +33,7 @@ else {
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Formulaire de contact</title>
+		<title>Login</title>
 		<style>
     		body {
     			padding-left: 10px;
@@ -55,13 +52,11 @@ else {
 	<body>
 		<h1>Authentification</h1>
 		<form method="post">
-			<label for="name">Nom :</label>
+			<label for="name">Username :</label>
 				<input id="name" name="name" type="text" value= "<?php echo $name; ?>" autofocus /> <br/><br/>
-			<label for="f_name">Pr&eacute;nom :</label>
-				<input id="f_name" name="f_name" type="text" value= "<?php echo $f_name; ?>" /> <br/><br/>
-			<label for="email">Adresse email :</label>
-				<input id="email" name="email" type="text" value= "<?php echo $email; ?>"/><br/><br/>
-			<button id="envoyer" type="submit">Entrer</button>
+			<label for="password">Mot de passe:</label>
+				<input id="password" name="password" type="password" value= ""/><br/><br/>
+			<button id="envoyer" type="submit">Login</button>
 		</form>
 		<div>
         	<?=$msg; ?>
