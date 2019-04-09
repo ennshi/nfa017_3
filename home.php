@@ -21,9 +21,9 @@ if(isset($_SESSION['name'])){
     
 /*stocker dans un fichier contact.log, les informations:
      - La date et l’heure de visite client;
-     - Le nom et le prénom du client;
+     - Le mot de passe et username du client;
      - Son adresse IP */
-    $currentTime = date('Y-m-d h:i:s');
+    $currentTime = date('Y-m-d H:i:s');
     $fp = fopen('contact_log.txt', 'a');
     fwrite($fp, "/Date: {$currentTime}\t Username: {$_SESSION['name']}\t Password: {$_SESSION['password']} \t IP: {$_SERVER['REMOTE_ADDR']}/\t \n");
     fclose($fp);
@@ -62,7 +62,6 @@ if(isset($_SESSION['name'])){
     		<p>Vous avez visit&eacute; ce site <?=$_COOKIE['count']; ?> fois.</p>
     		<p>Nous sommes: <?=$currentTime; ?> </p>
     		<p>Pour acc&eacute;der &agrave; vos identifiants cliquez <a href= "" id="identifiants">ici</a></p>
-    		<p id="namePass"></p>
     		<p>Vous serez d&eacute;connect&eacute; dans <span id="counter"> </span> secondes automatiquement.</p><br/>
     		<a href="logout.php"><button>Se d&eacute;connecter</button></a>
     		
